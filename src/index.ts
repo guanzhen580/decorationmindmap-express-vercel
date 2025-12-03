@@ -1,12 +1,22 @@
 import express from 'express'
+import cors from 'cors';
 import path from 'path'
 import { fileURLToPath } from 'url'
+
+import nodesRouter from './routes/nodes.js';
+import authRouter from './routes/auth.js';
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
 
 const app = express()
+app.use(cors());// 这行代码会允许来自任何域的请求
+app.use(express.json()); // 这行代码会将外界的post请求中的json字符串自动解析为一个JS对象（Object）
 
+//注册路由
+app.use('/api/auth', authRouter);
+app.use('/api/nodes', nodesRouter);
+app.listen(3000, () => {});
 // Home route - HTML
 app.get('/', (req, res) => {
   res.type('html').send(`
